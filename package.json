@@ -1,0 +1,19 @@
+{
+  "name": "budget-tracker-cli",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Учёт личного бюджета на TypeScript",
+  "type": "module",
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "build": "npm run clean && tsc -p tsconfig.json",
+    "start": "npm run build && node dist/index.js",
+    "dev": "tsc -p tsconfig.json --watch",
+    "clean": "node scripts/clean.mjs"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}
