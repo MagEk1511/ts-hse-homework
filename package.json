@@ -12,7 +12,9 @@
     "start": "npm run build && node dist/index.js",
     "dev": "tsc -p tsconfig.json --watch",
     "clean": "node scripts/clean.mjs",
-    "demo:calculations": "npm run build && node dist/calculation-demo.js"
+    "demo:calculations": "npm run build && node dist/calculation-demo.js",
+    "demo:functions": "npm run build && node dist/functions.js",
+    "test": "npm run build && node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "typescript": "5.9.3"
