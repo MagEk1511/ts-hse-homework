@@ -1,44 +1,46 @@
-import type { IAccount, IAccountManager, ITransaction, ISummary } from './types.js';
+import { Account, AccountManager, BudgetSummary, Transaction } from './classes.js';
 
-const account: IAccount & { transactions: ITransaction[] } = {
-  id: 1, name: 'Личный бюджет', transactions: [],
-  addTransaction(transaction: ITransaction): void { this.transactions.push(transaction); },
-  removeTransactionById(id: number): boolean {
-    const index = this.transactions.findIndex(t => t.id === id);
-    if (index < 0) return false;
-    this.transactions.splice(index, 1);
-    return true;
-  },
-  getTransactions(): ITransaction[] { return [...this.transactions]; },
-};
-const manager: IAccountManager & { accounts: IAccount[] } = {
-  accounts: [],
-  addAccount(item: IAccount): void { this.accounts.push(item); },
-  removeAccountById(id: number): boolean {
-    const index = this.accounts.findIndex(item => item.id === id);
-    if (index < 0) return false;
-    this.accounts.splice(index, 1);
-    return true;
-  },
-  getAccounts(): IAccount[] { return [...this.accounts]; },
-  getAccountById(id: number): IAccount | undefined { return this.accounts.find(item => item.id === id); },
-  getSummary(id: number): ISummary {
-    const item = this.getAccountById(id);
-    if (!item) throw new Error('Счёт не найден.');
-    const transactions = item.getTransactions();
-    const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-    const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-    return { income, expenses, balance: income - expenses };
-  },
-};
-account.addTransaction({ id: 1, amount: 1000, type: 'income', date: '2023-01-01', description: 'Зарплата' });
-account.addTransaction({ id: 2, amount: 200, type: 'expense', date: '2023-01-05', description: 'Продукты' });
-account.addTransaction({ id: 3, amount: 150, type: 'expense', date: '2023-01-10', description: 'Коммунальные услуги' });
-manager.addAccount(account);
-console.log('Счета:', manager.getAccounts());
-console.log('Поиск:', manager.getAccountById(1)?.name);
-console.log('Сводка:', manager.getSummary(1));
-console.log('Удаление транзакции:', account.removeTransactionById(3));
-console.log('Оставшиеся транзакции:', account.getTransactions());
-console.log('Удаление счёта:', manager.removeAccountById(1));
-console.log('Оставшиеся счета:', manager.getAccounts());
+console.log('🚀 Budget Tracker CLI');
+
+const personalAccount = new Account(1, 'Личный бюджет');
+personalAccount.addTransaction(new Transaction(1, 1000, 'income', '2023-01-01T00:00:00Z', 'Зарплата'));
+personalAccount.addTransaction(new Transaction(2, 200, 'expense', '2023-01-05T00:00:00Z', 'Продукты'));
+personalAccount.addTransaction(new Transaction(3, 150, 'expense', '2023-01-10T00:00:00Z', 'Коммунальные услуги'));
+
+const savings = new Account(2, 'Накопления');
+savings.addTransaction(new Transaction(4, 500, 'income', '2023-01-02T00:00:00Z', 'Премия'));
+
+const manager = new AccountManager();
+manager.addAccount(personalAccount);
+manager.addAccount(savings);
+
+console.log(manager.toString());
+console.log('\nОбщий баланс всех бюджетов:', manager.balance, '₽');
+console.log('Доходы:', manager.income, '₽; расходы:', manager.expenses, '₽');
+console.log('Сводка личного счёта:', personalAccount.getSummary());
+console.log('Сводка всех счетов:', manager.getSummary());
+console.log('Краткая сводка:\n' + manager.getSummaryString());
+console.log('Получение счёта #1:', manager.getAccountById(1)?.name);
+console.log('Несуществующий счёт:', manager.getAccountById(999));
+console.log('Все счета:', manager.getAllAccounts().map(account => account.name));
+console.log('Все счета (метод из темы 4):', manager.getAccounts().length);
+console.log('\nТранзакции личного бюджета:');
+personalAccount.getTransactions().forEach(transaction => console.log(transaction.toString()));
+
+// Один общий контракт работает со счётом и со всем менеджером (полиморфизм).
+function printSummary(label: string, budget: BudgetSummary): void {
+  console.log(`${label}: ${budget.getSummaryString()}`);
+}
+console.log('\nОбщий интерфейс сводки:');
+printSummary('Счёт', personalAccount);
+printSummary('Менеджер', manager);
+
+// Временные данные позволяют показать удаление, сохранив исходный пример.
+personalAccount.addTransaction(new Transaction(5, 10, 'expense', '2023-01-11', 'Пробная покупка'));
+console.log('\nУдаление транзакции #5:', personalAccount.removeTransactionById(5));
+console.log('Повторное удаление транзакции #5:', personalAccount.removeTransactionById(5));
+const temporaryAccount = new Account(3, 'Временный счёт');
+manager.addAccount(temporaryAccount);
+console.log('Удаление счёта #3:', manager.removeAccountById(3));
+console.log('Повторное удаление счёта #3:', manager.removeAccountById(3));
+console.log('Итоговая сводка:\n' + manager.getSummaryString());

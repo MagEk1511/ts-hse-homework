@@ -1,23 +1,37 @@
+import type { Account, Transaction } from './classes.js';
+
 export type TransactionType = 'income' | 'expense';
+
 export interface ITransaction {
-  id: number;
-  amount: number;
-  type: TransactionType;
-  date: string;
-  description: string;
+  readonly id: number;
+  readonly amount: number;
+  readonly type: TransactionType;
+  readonly date: string;
+  readonly description: string;
 }
+
+export interface ISummary {
+  readonly income: number;
+  readonly expenses: number;
+  readonly balance: number;
+}
+
 export interface IAccount {
-  id: number;
+  readonly id: number;
   name: string;
-  addTransaction(transaction: ITransaction): void;
-  removeTransactionById(id: number): boolean;
-  getTransactions(): ITransaction[];
+  readonly transactions: Transaction[];
+  addTransaction(transaction: Transaction): void;
+  removeTransactionById(transactionId: number): boolean;
+  getTransactions(): Transaction[];
 }
-export interface ISummary { income: number; expenses: number; balance: number; }
+
 export interface IAccountManager {
-  addAccount(account: IAccount): void;
-  removeAccountById(id: number): boolean;
-  getAccounts(): IAccount[];
-  getAccountById(id: number): IAccount | undefined;
-  getSummary(accountId: number): ISummary;
+  readonly accounts: Account[];
+  addAccount(account: Account): void;
+  removeAccountById(accountId: number): boolean;
+  getAccountById(id: number): Account | undefined;
+  getAllAccounts(): Account[];
+  getAccounts(): Account[];
+  getSummary(): ISummary;
+  getSummaryString(): string;
 }
