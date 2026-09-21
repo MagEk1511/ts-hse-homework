@@ -14,7 +14,8 @@
     "clean": "node scripts/clean.mjs",
     "demo:calculations": "npm run build && node dist/calculation-demo.js",
     "demo:functions": "npm run build && node dist/functions.js",
-    "test": "npm run build && node --test tests/*.test.mjs"
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "demo:generics": "npm run build && node dist/demos/generics.js"
   },
   "devDependencies": {
     "typescript": "5.9.3"
