@@ -1,25 +1,25 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "rootDir": "src",
-    "outDir": "dist",
+    "module": "none",
+    "moduleResolution": "classic",
+    "outFile": "dist/budget-tracker.js",
     "strict": true,
     "noImplicitOverride": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "sourceMap": true,
-    "esModuleInterop": true,
     "types": [],
     "noEmitOnError": true
   },
-  "include": [
-    "src/**/*.ts"
+  "files": [
+    "src/interfaces/TransactionType.ts",
+    "src/interfaces/ITransaction.ts",
+    "src/interfaces/ISummary.ts",
+    "src/interfaces/IAccount.ts",
+    "src/interfaces/IAccountManager.ts",
+    "src/utils/budget.ts",
+    "src/classes/Transaction.ts",
+    "src/classes/BudgetSummary.ts",
+    "src/classes/Account.ts",
+    "src/classes/AccountManager.ts",
+    "src/index.ts"
   ]
 }
