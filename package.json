@@ -9,11 +9,29 @@
   },
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json",
-    "start": "npm run build && node dist/budget-tracker.js",
+    "build:examples": "tsc -p examples/hw04/tsconfig.json && tsc -p examples/hw07/tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
-    "clean": "node scripts/clean.mjs"
+    "start": "tsx src/index.ts",
+    "start:compiled": "npm run build && node dist/index.js",
+    "demo:calculations": "npm run build && node dist/calculation-demo.js",
+    "demo:functions": "npm run build && node dist/functions.js",
+    "demo:interfaces": "tsc -p examples/hw04/tsconfig.json && node dist/examples/hw04/index.js",
+    "demo:namespaces": "tsc -p examples/hw07/tsconfig.json && node dist/examples/hw07.js",
+    "demo:oop": "npm run build && node dist/demos/oop.js",
+    "demo:generics": "npm run build && node dist/demos/generics.js",
+    "clean": "node scripts/clean.mjs",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
+    "@types/lodash": "4.17.26",
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
     "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "lodash": "4.18.1",
+    "moment": "2.31.0",
+    "uuid": "14.0.3"
   }
 }

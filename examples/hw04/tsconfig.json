@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "../../dist/examples/hw04",
+    "allowJs": false
+  },
+  "include": ["src/**/*.ts"]
+}

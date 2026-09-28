@@ -1,6 +1,9 @@
 // Тема 3: функции используют только примитивные типы и массивы.
+import sum from 'lodash/sum.js';
+
 export function calculateTotal(values: number[]): number {
-  return values.reduce((total, value) => total + value, 0);
+  // Тема 8: JS-библиотека с декларациями из @types/lodash.
+  return sum(values);
 }
 
 export function calculateAverage(values: number[]): number {

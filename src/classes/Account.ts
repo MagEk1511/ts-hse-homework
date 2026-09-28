@@ -1,13 +1,25 @@
-namespace BudgetTracker {
+import { v4 as uuidv4 } from 'uuid';
+import type { IAccount } from '../interfaces/IAccount.js';
+import type { ISummary } from '../interfaces/ISummary.js';
+import { formatCurrency } from '../lib/budget-utils.js';
+import { sumMoney } from '../utils/sumMoney.js';
+import { validateName } from '../utils/validation.js';
+import { BudgetSummary } from './BudgetSummary.js';
+import type { Transaction } from './Transaction.js';
+
 export class Account extends BudgetSummary implements IAccount, ISummary {
+  readonly #id: string;
+  get id(): string { return this.#id; }
+
   readonly #transactions: Transaction[] = [];
 
-  constructor(public readonly id: number, public name: string) {
+  constructor(public name: string) {
     super();
-    validateId(id);
+    validateName(name);
+    this.name = name.trim();
+    this.#id = uuidv4();
   }
 
-  // Наружу выдаётся копия массива: изменить список можно только через методы.
   get transactions(): Transaction[] {
     return [...this.#transactions];
   }
@@ -21,13 +33,13 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
   }
 
   addTransaction(transaction: Transaction): void {
-    if (this.#transactions.some(existing => existing.id === transaction.id)) {
+    if (this.#transactions.some(t => t.id === transaction.id)) {
       throw new Error(`Транзакция с id ${transaction.id} уже существует на этом счёте.`);
     }
     this.#transactions.push(transaction);
   }
 
-  removeTransactionById(transactionId: number): boolean {
+  removeTransactionById(transactionId: string): boolean {
     const index = this.#transactions.findIndex(t => t.id === transactionId);
     if (index === -1) return false;
     this.#transactions.splice(index, 1);
@@ -38,8 +50,10 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     return this.transactions;
   }
 
+
+
   override getSummaryString(): string {
-    return `${this.id}) ${this.name} | Баланс: ${rubles.format(this.balance)} | Транзакций: ${this.#transactions.length}`;
+    return `${this.id.slice(0, 8)}) ${this.name} | Баланс: ${formatCurrency(this.balance)} | Транзакций: ${this.#transactions.length}`;
   }
 
   override toString(): string {
@@ -48,5 +62,4 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
       : '  Транзакций пока нет.';
     return `${this.getSummaryString()}\nСписок транзакций:\n${transactions}`;
   }
-}
 }

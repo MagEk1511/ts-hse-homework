@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "none",
+    "moduleResolution": "classic",
+    "outFile": "../../dist/examples/hw07.js",
+    "strict": true,
+    "noImplicitOverride": true,
+    "types": [],
+    "noEmitOnError": true
+  },
+  "files": [
+    "src/interfaces/TransactionType.ts",
+    "src/interfaces/ITransaction.ts",
+    "src/interfaces/ISummary.ts",
+    "src/interfaces/IAccount.ts",
+    "src/interfaces/IAccountManager.ts",
+    "src/utils/budget.ts",
+    "src/classes/Transaction.ts",
+    "src/classes/BudgetSummary.ts",
+    "src/classes/Account.ts",
+    "src/classes/AccountManager.ts",
+    "src/index.ts"
+  ]
+}

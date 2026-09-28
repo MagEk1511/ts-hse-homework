@@ -1,9 +1,9 @@
-namespace BudgetTracker {
+import type { TransactionType } from './TransactionType.js';
+
 export interface ITransaction {
-  readonly id: number;
+  readonly id: string;
   readonly amount: number;
   readonly type: TransactionType;
   readonly date: string;
   readonly description: string;
-}
 }

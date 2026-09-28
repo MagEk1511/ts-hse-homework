@@ -1,10 +1,10 @@
-namespace BudgetTracker {
+import type { Transaction } from '../classes/Transaction.js';
+
 export interface IAccount {
-  readonly id: number;
+  readonly id: string;
   name: string;
   readonly transactions: Transaction[];
   addTransaction(transaction: Transaction): void;
-  removeTransactionById(transactionId: number): boolean;
+  removeTransactionById(transactionId: string): boolean;
   getTransactions(): Transaction[];
-}
 }
