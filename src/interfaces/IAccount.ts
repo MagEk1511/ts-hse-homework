@@ -1,3 +1,4 @@
+import type { AccountUpdate } from './utility-types.js';
 import type { Transaction } from '../classes/Transaction.js';
 
 export interface IAccount {
@@ -7,4 +8,5 @@ export interface IAccount {
   addTransaction(transaction: Transaction): void;
   removeTransactionById(transactionId: string): boolean;
   getTransactions(): Transaction[];
+  update(update: AccountUpdate): void;
 }

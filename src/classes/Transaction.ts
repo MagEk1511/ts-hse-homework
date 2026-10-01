@@ -1,3 +1,4 @@
+import type { TransactionUpdate } from '../interfaces/utility-types.js';
 import moment from 'moment';
 import 'moment/locale/ru.js';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,10 +12,10 @@ export class Transaction implements ITransaction {
   get id(): string { return this.#id; }
 
   constructor(
-    public readonly amount: number,
-    public readonly type: TransactionType,
-    public readonly date: string,
-    public readonly description: string,
+    public amount: number,
+    public type: TransactionType,
+    public date: string,
+    public description: string,
   ) {
     validateAmount(amount);
     validateTransactionType(type);
@@ -23,6 +24,23 @@ export class Transaction implements ITransaction {
     this.#id = uuidv4();
   }
 
+
+  update(update: TransactionUpdate): void {
+    if ('id' in update) throw new TypeError('Идентификатор транзакции нельзя изменять.');
+    const amount = update.amount !== undefined ? update.amount : this.amount;
+    const type = update.type !== undefined ? update.type : this.type;
+    const date = update.date !== undefined ? update.date : this.date;
+    const description = update.description !== undefined ? update.description : this.description;
+    validateAmount(amount);
+    validateTransactionType(type);
+    validateDate(date);
+    if (typeof description !== 'string') throw new TypeError('Описание должно быть строкой.');
+    // Проверки завершены до изменения любого поля.
+    this.amount = amount;
+    this.type = type;
+    this.date = date;
+    this.description = description;
+  }
 
   toString(): string {
     const type = this.type === 'income' ? 'доход' : 'расход';

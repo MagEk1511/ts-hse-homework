@@ -1,3 +1,4 @@
+import type { AccountUpdate } from '../interfaces/utility-types.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { IAccount } from '../interfaces/IAccount.js';
 import type { ISummary } from '../interfaces/ISummary.js';
@@ -51,6 +52,14 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
   }
 
 
+
+  update(update: AccountUpdate): void {
+    if ('id' in update) throw new TypeError('Идентификатор счёта нельзя изменять.');
+    if (update.name !== undefined) {
+      validateName(update.name);
+      this.name = update.name.trim();
+    }
+  }
 
   override getSummaryString(): string {
     return `${this.id.slice(0, 8)}) ${this.name} | Баланс: ${formatCurrency(this.balance)} | Транзакций: ${this.#transactions.length}`;

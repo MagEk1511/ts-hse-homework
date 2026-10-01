@@ -73,6 +73,14 @@ test('менеджер находит, перечисляет и удаляет 
   assert.equal(manager.getAccountById(account.id), undefined);
   assert.equal(manager.balance, 0);
 });
+test('сводка менеджера обновляется после добавления и изменения транзакции', () => {
+  const manager = new AccountManager(); const first = personalAccount(); const second = new Account('Копилка');
+  const item = transaction(500); second.addTransaction(item);
+  manager.addAccount(first); manager.addAccount(second);
+  assert.deepEqual(manager.getSummary(), { income: 1500, expenses: 350, balance: 1150 });
+  item.update({ amount: 600 });
+  assert.equal(manager.balance, 1250);
+});
 test('повторное добавление объекта с тем же ID запрещено', () => {
   const manager = new AccountManager(); const account = personalAccount(); manager.addAccount(account);
   assert.throws(() => manager.addAccount(account), /уже существует/);
@@ -105,6 +113,22 @@ test('невалидные суммы и типы отклоняются', () =>
 test('существование календарной даты проверяется отдельно от ISO-формата', () => {
   for (const date of ['2024-02-29', '2023-01-01T00:00:00Z', '2023-01-01T10:00:00.123+03:00']) assert.equal(new Transaction(1, 'income', date, '').date, date);
   for (const date of ['', '01.01.2023', '2023-02-29', '2023-02-30', '2023-13-01', '2023-01-01T00:00:00']) assert.throws(() => new Transaction(1, 'income', date, ''), RangeError);
+});
+test('частичное обновление транзакции сохраняет остальные поля и ID', () => {
+  const item = transaction(); const id = item.id;
+  item.update({ amount: 1200 }); assert.equal(item.amount, 1200); assert.equal(item.type, 'income');
+  item.update({ type: 'expense', date: '2024-02-29', description: 'Новое' });
+  assert.equal(item.id, id); assert.equal(item.type, 'expense'); assert.equal(item.description, 'Новое');
+  assert.throws(() => item.update({ id: 'changed' }), /нельзя изменять/);
+});
+test('ошибочное обновление не оставляет частичных изменений', () => {
+  const item = transaction();
+  assert.throws(() => item.update({ amount: 2000, date: '2023-02-30' })); assert.equal(item.amount, 1000);
+  assert.throws(() => item.update({ description: null }));
+  const account = new Account('Исходный'); const id = account.id;
+  account.update({ name: 'Новое' }); assert.equal(account.name, 'Новое'); assert.equal(account.id, id);
+  assert.throws(() => account.update({ name: '  ' })); assert.equal(account.name, 'Новое');
+  assert.throws(() => account.update({ id: 'changed' }), /нельзя изменять/);
 });
 test('пустое имя и переполнение суммы отклоняются', () => {
   assert.throws(() => new Account('  '), RangeError);
