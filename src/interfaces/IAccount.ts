@@ -9,4 +9,5 @@ export interface IAccount {
   removeTransactionById(transactionId: string): boolean;
   getTransactions(): Transaction[];
   update(update: AccountUpdate): void;
+  exportTransactionsToCSV(filename: string): Promise<void>;
 }

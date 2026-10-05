@@ -1,10 +1,12 @@
+import { writeFile } from 'node:fs/promises';
+import { escapeCsvValue } from '../utils/escapeCsvValue.js';
 import type { AccountUpdate } from '../interfaces/utility-types.js';
 import { v4 as uuidv4 } from 'uuid';
 import type { IAccount } from '../interfaces/IAccount.js';
 import type { ISummary } from '../interfaces/ISummary.js';
 import { formatCurrency } from '../lib/budget-utils.js';
 import { sumMoney } from '../utils/sumMoney.js';
-import { validateName } from '../utils/validation.js';
+import { errorMessage, validateName } from '../utils/validation.js';
 import { BudgetSummary } from './BudgetSummary.js';
 import type { Transaction } from './Transaction.js';
 
@@ -58,6 +60,17 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     if (update.name !== undefined) {
       validateName(update.name);
       this.name = update.name.trim();
+    }
+  }
+
+  async exportTransactionsToCSV(filename: string): Promise<void> {
+    const rows = this.#transactions.map(t => [t.id, t.amount, t.type, t.date, t.description]
+      .map(escapeCsvValue).join(','));
+    const csv = ['id,amount,type,date,description', ...rows].join('\r\n') + '\r\n';
+    try {
+      await writeFile(filename, csv, 'utf8');
+    } catch (error: unknown) {
+      throw new Error(`Не удалось экспортировать CSV в «${filename}»: ${errorMessage(error)}`, { cause: error });
     }
   }
 

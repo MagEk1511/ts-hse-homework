@@ -22,7 +22,8 @@
     "clean": "node scripts/clean.mjs",
     "test": "npm run build && node --test tests/*.test.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "demo:types": "npm run build && node dist/demos/types.js"
+    "demo:types": "npm run build && node dist/demos/types.js",
+    "demo:csv": "npm run build && node dist/demos/csv.js"
   },
   "devDependencies": {
     "@types/lodash": "4.17.26",
