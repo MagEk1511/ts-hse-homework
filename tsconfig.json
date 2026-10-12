@@ -16,6 +16,9 @@
     "declaration": true,
     "sourceMap": true,
     "allowJs": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
     "esModuleInterop": true,
     "types": [
       "node"

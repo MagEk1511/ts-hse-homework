@@ -5,7 +5,9 @@ import { join } from 'node:path';
 import test from 'node:test';
 import { Account } from '../dist/classes/Account.js';
 import { Transaction } from '../dist/classes/Transaction.js';
+import { setDecoratorLogging } from '../dist/decorators/logging.js';
 import { escapeCsvValue } from '../dist/utils/escapeCsvValue.js';
+setDecoratorLogging(false);
 
 async function directory(context) {
   const path = await mkdtemp(join(tmpdir(), 'budget-csv-'));

@@ -4,6 +4,8 @@ import { Account } from '../dist/classes/Account.js';
 import { AccountManager } from '../dist/classes/AccountManager.js';
 import { BudgetSummary } from '../dist/classes/BudgetSummary.js';
 import { Transaction } from '../dist/classes/Transaction.js';
+import { setDecoratorLogging } from '../dist/decorators/logging.js';
+setDecoratorLogging(false);
 
 const transaction = (amount = 1000, type = 'income') => new Transaction(amount, type, '2023-01-01', 'Пример');
 function personalAccount() {

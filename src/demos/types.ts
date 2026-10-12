@@ -1,5 +1,6 @@
 import { Account } from '../classes/Account.js';
 import { Transaction } from '../classes/Transaction.js';
+import { setDecoratorLogging } from '../decorators/logging.js';
 import type {
   AccountInfo, AccountUpdate, CategoryLimits, CompleteTransaction, NullableDescription,
   TransactionConstructorParams, TransactionInstance, TransactionPreview,
@@ -7,6 +8,7 @@ import type {
 } from '../interfaces/utility-types.js';
 import type { IsIncome, OptionalTransaction, ReadonlyTransactionFields, TransactionFieldType } from '../interfaces/mapped-types.js';
 
+setDecoratorLogging(false);
 const account = new Account('Личный бюджет');
 const params: TransactionConstructorParams = [1000, 'income', '2023-01-01', 'Зарплата'];
 const transaction: TransactionInstance = new Transaction(...params);
@@ -15,7 +17,7 @@ const accountUpdate: AccountUpdate = { name: 'Основной счёт' };
 transaction.update(transactionUpdate);
 account.update(accountUpdate);
 account.addTransaction(transaction);
-const complete: CompleteTransaction = { ...transaction, id: transaction.id };
+const complete: CompleteTransaction = { ...transaction };
 const preview: TransactionPreview = { id: transaction.id, amount: transaction.amount, type: transaction.type, date: transaction.date };
 const withoutDescription: TransactionWithoutDescription = { ...preview };
 const accountInfo: AccountInfo = { id: account.id, name: account.name };

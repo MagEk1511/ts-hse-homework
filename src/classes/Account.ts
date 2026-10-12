@@ -1,18 +1,23 @@
 import { writeFile } from 'node:fs/promises';
-import { escapeCsvValue } from '../utils/escapeCsvValue.js';
-import type { AccountUpdate } from '../interfaces/utility-types.js';
 import { v4 as uuidv4 } from 'uuid';
+import { LogClass } from '../decorators/LogClass.js';
+import { LogMethod } from '../decorators/LogMethod.js';
+import { Metadata } from '../decorators/Metadata.js';
+import { ReadOnly } from '../decorators/ReadOnly.js';
 import type { IAccount } from '../interfaces/IAccount.js';
 import type { ISummary } from '../interfaces/ISummary.js';
+import type { AccountUpdate } from '../interfaces/utility-types.js';
 import { formatCurrency } from '../lib/budget-utils.js';
+import { escapeCsvValue } from '../utils/escapeCsvValue.js';
 import { sumMoney } from '../utils/sumMoney.js';
 import { errorMessage, validateName } from '../utils/validation.js';
 import { BudgetSummary } from './BudgetSummary.js';
 import type { Transaction } from './Transaction.js';
 
+@LogClass
 export class Account extends BudgetSummary implements IAccount, ISummary {
-  readonly #id: string;
-  get id(): string { return this.#id; }
+  @ReadOnly
+  id: string;
 
   readonly #transactions: Transaction[] = [];
 
@@ -20,9 +25,10 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     super();
     validateName(name);
     this.name = name.trim();
-    this.#id = uuidv4();
+    this.id = uuidv4();
   }
 
+  @Metadata('description', 'История операций счёта')
   get transactions(): Transaction[] {
     return [...this.#transactions];
   }
@@ -35,6 +41,7 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     return sumMoney(this.#transactions.filter(t => t.type === 'expense').map(t => t.amount));
   }
 
+  @LogMethod
   addTransaction(transaction: Transaction): void {
     if (this.#transactions.some(t => t.id === transaction.id)) {
       throw new Error(`Транзакция с id ${transaction.id} уже существует на этом счёте.`);
@@ -42,6 +49,7 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     this.#transactions.push(transaction);
   }
 
+  @LogMethod
   removeTransactionById(transactionId: string): boolean {
     const index = this.#transactions.findIndex(t => t.id === transactionId);
     if (index === -1) return false;
@@ -49,11 +57,10 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
     return true;
   }
 
+  @LogMethod
   getTransactions(): Transaction[] {
     return this.transactions;
   }
-
-
 
   update(update: AccountUpdate): void {
     if ('id' in update) throw new TypeError('Идентификатор счёта нельзя изменять.');
@@ -75,7 +82,9 @@ export class Account extends BudgetSummary implements IAccount, ISummary {
   }
 
   override getSummaryString(): string {
-    return `${this.id.slice(0, 8)}) ${this.name} | Баланс: ${formatCurrency(this.balance)} | Транзакций: ${this.#transactions.length}`;
+    const description: unknown = Reflect.getMetadata('description', this, 'transactions');
+    return `${this.id.slice(0, 8)}) ${this.name} | Баланс: ${formatCurrency(this.balance)} | Транзакций: ${this.#transactions.length}` +
+      (typeof description === 'string' ? ` | ${description}` : '');
   }
 
   override toString(): string {

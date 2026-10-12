@@ -1,15 +1,16 @@
-import type { TransactionUpdate } from '../interfaces/utility-types.js';
 import moment from 'moment';
 import 'moment/locale/ru.js';
 import { v4 as uuidv4 } from 'uuid';
+import { ReadOnly } from '../decorators/ReadOnly.js';
 import type { ITransaction } from '../interfaces/ITransaction.js';
 import type { TransactionType } from '../interfaces/TransactionType.js';
+import type { TransactionUpdate } from '../interfaces/utility-types.js';
 import { formatCurrency } from '../lib/budget-utils.js';
 import { validateAmount, validateDate, validateTransactionType } from '../utils/validation.js';
 
 export class Transaction implements ITransaction {
-  readonly #id: string;
-  get id(): string { return this.#id; }
+  @ReadOnly
+  id: string;
 
   constructor(
     public amount: number,
@@ -21,9 +22,8 @@ export class Transaction implements ITransaction {
     validateTransactionType(type);
     validateDate(date);
     if (typeof description !== 'string') throw new TypeError('Описание должно быть строкой.');
-    this.#id = uuidv4();
+    this.id = uuidv4();
   }
-
 
   update(update: TransactionUpdate): void {
     if ('id' in update) throw new TypeError('Идентификатор транзакции нельзя изменять.');

@@ -23,7 +23,9 @@
     "test": "npm run build && node --test tests/*.test.mjs",
     "typecheck": "tsc -p tsconfig.type-tests.json --noEmit",
     "demo:types": "npm run build && node dist/demos/types.js",
-    "demo:csv": "npm run build && node dist/demos/csv.js"
+    "demo:csv": "npm run build && node dist/demos/csv.js",
+    "demo:decorators": "npm run build && node dist/demos/decorators.js",
+    "demo:all": "npm run build && npm run build:examples && node dist/demos/all.js && node dist/examples/hw04/index.js && node dist/examples/hw07.js"
   },
   "devDependencies": {
     "@types/lodash": "4.17.26",
@@ -34,6 +36,7 @@
   "dependencies": {
     "lodash": "4.18.1",
     "moment": "2.31.0",
-    "uuid": "14.0.3"
+    "uuid": "14.0.3",
+    "reflect-metadata": "0.2.2"
   }
 }

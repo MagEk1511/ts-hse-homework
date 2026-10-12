@@ -1,7 +1,9 @@
 import { mkdir } from 'node:fs/promises';
 import { Account } from '../classes/Account.js';
 import { Transaction } from '../classes/Transaction.js';
+import { setDecoratorLogging } from '../decorators/logging.js';
 
+setDecoratorLogging(false);
 const account = new Account('CSV-пример');
 account.addTransaction(new Transaction(1000, 'income', '2023-01-01', 'Зарплата'));
 account.addTransaction(new Transaction(200, 'expense', '2023-01-05', 'Продукты, "магазин"\nПокупка'));
