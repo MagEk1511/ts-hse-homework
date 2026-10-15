@@ -37,6 +37,7 @@
     "lodash": "4.18.1",
     "moment": "2.31.0",
     "uuid": "14.0.3",
-    "reflect-metadata": "0.2.2"
+    "reflect-metadata": "0.2.2",
+    "inquirer": "14.2.3"
   }
 }
