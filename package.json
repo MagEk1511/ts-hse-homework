@@ -20,7 +20,7 @@
     "demo:oop": "npm run build && node dist/demos/oop.js",
     "demo:generics": "npm run build && node dist/demos/generics.js",
     "clean": "node scripts/clean.mjs",
-    "test": "npm run build && node --test tests/*.test.mjs",
+    "test": "npm run build && npm run typecheck && npm run build:examples && node --test tests/*.test.mjs",
     "typecheck": "tsc -p tsconfig.type-tests.json --noEmit",
     "demo:types": "npm run build && node dist/demos/types.js",
     "demo:csv": "npm run build && node dist/demos/csv.js",
