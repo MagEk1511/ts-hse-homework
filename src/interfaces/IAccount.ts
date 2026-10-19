@@ -1,5 +1,5 @@
-import type { AccountUpdate } from './utility-types.js';
 import type { Transaction } from '../classes/Transaction.js';
+import type { AccountUpdate } from './utility-types.js';
 
 export interface IAccount {
   readonly id: string;

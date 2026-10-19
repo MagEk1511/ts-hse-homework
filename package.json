@@ -2,7 +2,7 @@
   "name": "budget-tracker-cli",
   "version": "1.0.0",
   "private": true,
-  "description": "Учёт личного бюджета на TypeScript",
+  "description": "Все 13 домашних заданий по TypeScript: Budget Tracker CLI",
   "type": "module",
   "engines": {
     "node": ">=22.13.0"
@@ -11,6 +11,7 @@
     "build": "npm run clean && tsc -p tsconfig.json",
     "build:examples": "tsc -p examples/hw04/tsconfig.json && tsc -p examples/hw07/tsconfig.json",
     "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.type-tests.json --noEmit",
     "start": "tsx src/index.ts",
     "start:compiled": "npm run build && node dist/index.js",
     "demo:calculations": "npm run build && node dist/calculation-demo.js",
@@ -19,13 +20,12 @@
     "demo:namespaces": "tsc -p examples/hw07/tsconfig.json && node dist/examples/hw07.js",
     "demo:oop": "npm run build && node dist/demos/oop.js",
     "demo:generics": "npm run build && node dist/demos/generics.js",
-    "clean": "node scripts/clean.mjs",
-    "test": "npm run build && npm run typecheck && npm run build:examples && node --test tests/*.test.mjs",
-    "typecheck": "tsc -p tsconfig.type-tests.json --noEmit",
     "demo:types": "npm run build && node dist/demos/types.js",
-    "demo:csv": "npm run build && node dist/demos/csv.js",
     "demo:decorators": "npm run build && node dist/demos/decorators.js",
-    "demo:all": "npm run build && npm run build:examples && node dist/demos/all.js && node dist/examples/hw04/index.js && node dist/examples/hw07.js"
+    "demo:csv": "npm run build && node dist/demos/csv.js",
+    "demo:all": "npm run build && npm run build:examples && node dist/demos/all.js && node dist/examples/hw04/index.js && node dist/examples/hw07.js",
+    "test": "npm run build && npm run typecheck && npm run build:examples && node --test tests/*.test.mjs",
+    "clean": "node scripts/clean.mjs"
   },
   "devDependencies": {
     "@types/lodash": "4.17.26",
@@ -34,10 +34,10 @@
     "typescript": "5.9.3"
   },
   "dependencies": {
+    "inquirer": "14.2.3",
     "lodash": "4.18.1",
     "moment": "2.31.0",
-    "uuid": "14.0.3",
     "reflect-metadata": "0.2.2",
-    "inquirer": "14.2.3"
+    "uuid": "14.0.3"
   }
 }
